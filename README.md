@@ -3,7 +3,8 @@
 </p>
 
 <h1><div align="center">Fan-Bot's</h1>
-<p align="center"><img src="https://img.shields.io/badge/PRICE-free-%231DC8EE"/><img src="https://img.shields.io/badge/.Net_Framework-4.7-%231DC8EE"/>
+<p align="center"><img src="https://img.shields.io/badge/PRICE-free-%231DC8EE"/>
+<img src="https://img.shields.io/badge/.Net_Framework-4.7-%231DC8EE"/>
 </p>
 
 <p align="center">
