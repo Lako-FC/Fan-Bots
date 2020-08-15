@@ -2,16 +2,14 @@
   <img align="center" src="https://github.com/Lako-FC/Fan-Bots/blob/master/GITHUB_RESOURCES/logo.png?raw=true" width="150"/> 
 </p>
 
-<p align="center">
- <img src="https://img.shields.io/badge/PRICE-free-%231DC8EE"/>
- <img src="https://img.shields.io/badge/.Net_Framework-4.7-%231DC8EE"/>
- <h1><div align="center">Fan-Bot's</h1>
+<h1><div align="center">Fan-Bot's</h1>
+<p align="center"><img src="https://img.shields.io/badge/PRICE-free-%231DC8EE"/><img src="https://img.shields.io/badge/.Net_Framework-4.7-%231DC8EE"/>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/downloads/Lako-FC/Fan-Bots/total?color=%231DC8EE&label=DOWNLOADS&logo=GitHub&logoColor=%231DC8EE&style=flat-square"/>
-  <img src="https://img.shields.io/github/last-commit/Lako-FC/Fan-Bots?color=%231DC8EE&label=LAST%20COMMIT&style=flat-square"/>
-  <img src="https://img.shields.io/github/release-date/Lako-FC/Fan-Bots?color=%231DC8EE&label=RELEASE%20DATE&style=flat-square"/>
+  <img src="https://img.shields.io/github/downloads/Lako-FC/Fan-Bots/total?color=%231DC8EE&label=DOWNLOADS&logo=GitHub&logoColor=%231DC8EE&style=flat"/>
+  <img src="https://img.shields.io/github/last-commit/Lako-FC/Fan-Bots?color=%231DC8EE&label=LAST%20COMMIT&style=flat"/>
+  <img src="https://img.shields.io/github/release-date/Lako-FC/Fan-Bots?color=%231DC8EE&label=RELEASE%20DATE&style=flat"/>
 </p>
 
 <p align="center">
