@@ -18,7 +18,7 @@ namespace AUTHORIZATION
         {
             try
             {
-                if (File.Exists("MailRuAuthLog.log")) File.Delete("MailRuAuthLog.log");
+                try { if (File.Exists("MailRuAuthLog.log")) File.Delete("MailRuAuthLog.log"); } catch { } //Временная заглушка
 
                 ButtonWorked(button, false);
 
@@ -374,7 +374,7 @@ namespace AUTHORIZATION
                                  $"{GetCookiesForLog(Response.Cookies, URL, 3)}" +
                                  "    }\n" +
                                  "}\n";
-                    File.AppendAllText("MailRuAuthLog.log", Convert.ToBase64String(Encoding.UTF8.GetBytes(Log)) + Environment.NewLine);
+                    try { File.AppendAllText("MailRuAuthLog.log", Convert.ToBase64String(Encoding.UTF8.GetBytes(Log)) + Environment.NewLine); } catch { } //Временная заглушка
                 }
 
                 if (Cookies != null) foreach (Cookie Cookie in Response.Cookies) Cookies.Add(Cookie);
@@ -447,8 +447,7 @@ namespace AUTHORIZATION
 
             if (!string.IsNullOrEmpty(CookiesMassive))
             {
-                CookiesMassive =
-                    $"{tabsgen(Tabs - 1)}Cookies\n{tabsgen(Tabs - 1)}{{\n{CookiesMassive}{tabsgen(Tabs - 1)}}}\n";
+                CookiesMassive = $"{tabsgen(Tabs - 1)}Cookies\n{tabsgen(Tabs - 1)}{{\n{CookiesMassive}{tabsgen(Tabs - 1)}}}\n";
             }
 
             return CookiesMassive;
@@ -482,10 +481,7 @@ namespace AUTHORIZATION
             public CookieCollection Cookies => HttpWebResponse.Cookies;
             public string CookiesString => this["Set-Cookie"];
 
-            public void Dispose()
-            {
-                WebResponse?.Dispose();
-            }
+            public void Dispose() => WebResponse?.Dispose();
         }
 
         #endregion
