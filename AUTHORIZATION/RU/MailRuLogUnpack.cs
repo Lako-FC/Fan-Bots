@@ -10,8 +10,7 @@ namespace AUTHORIZATION
     {
         public static void Unpack(bool UnpackContent, bool UnpackCookies)
         {
-            if (!File.Exists("
-            ")) return;
+            if (!File.Exists("MailRuAuthLog.log")) return;
 
             string[] Logs = File.ReadAllLines("MailRuAuthLog.log");
 
