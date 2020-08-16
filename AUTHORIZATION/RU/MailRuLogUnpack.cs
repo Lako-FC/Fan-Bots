@@ -5,11 +5,13 @@ using System.Text.RegularExpressions;
 
 namespace AUTHORIZATION
 {
+#if DEBUG
     internal static class MailRuLogUnpack
     {
         public static void Unpack(bool UnpackContent, bool UnpackCookies)
         {
-            if (!File.Exists("MailRuAuthLog.log")) return;
+            if (!File.Exists("
+            ")) return;
 
             string[] Logs = File.ReadAllLines("MailRuAuthLog.log");
 
@@ -49,4 +51,5 @@ namespace AUTHORIZATION
             }
         }
     }
+#endif
 }
