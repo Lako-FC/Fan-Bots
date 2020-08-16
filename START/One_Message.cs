@@ -199,7 +199,7 @@ namespace START
                 };
                 Process.Start(processStartInfo);
             }
-            catch (Exception er) { Program.MSB_Error(er.ToString()); }
+            catch (Exception er) { Program.MSB_Error(er.ToString()); Console.ReadKey(); }
         }
     }
 }
