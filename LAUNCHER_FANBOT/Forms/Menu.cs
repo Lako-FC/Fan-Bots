@@ -713,7 +713,7 @@ namespace LAUNCHER_FANBOT
                 if (!Directory.Exists(tmp_logs)) Directory.CreateDirectory(tmp_logs);
                 File.AppendAllText(tmp_file, $"[{TimeText()}]: {text}\n");
             }
-            catch (Exception er) { EngineWork.MSB_Error(er.ToString(), "[SaveLogs]"); }
+            catch { }
         }
         private void OpenCMD(int id_bot, string token, string id, string server)
         {
