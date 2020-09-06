@@ -8,6 +8,7 @@ namespace LAUNCHER_FANBOT
         [STAThread]
         private static void Main()
         {
+            //Press F
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Menu());
