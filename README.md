@@ -4,7 +4,7 @@
 
 <h1><div align="center">Fan-Bot's</h1>
 <p align="center"><img src="https://img.shields.io/badge/PRICE-free-%231DC8EE"/>
-<img src="https://img.shields.io/badge/.Net_Framework-4.7-%231DC8EE"/>
+<img src="https://img.shields.io/badge/.NET_FRAMEWORK-4.7-%231DC8EE"/>
 </p>
 
 <p align="center">
@@ -71,3 +71,7 @@
 2. Скачайте данный исходный код (лучше из релиза).
 3. Выполните сборку проекта по очереди (`AUTHORIZATION` -> `LAUNCHER_FANBOT` -> `START`).
 4. Запускайте по [инструкции запуска](https://github.com/Lako-FC/Fan-Bots#как-использовать).
+
+- ### Список, что нужно исправить
+1. Переписать авторизацию EU.
+2. Добавить поддержку @yandex, @gmail и т.д к RU авторизации.
