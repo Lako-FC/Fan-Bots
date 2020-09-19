@@ -72,8 +72,8 @@ namespace AUTHORIZATION
                                 IniFile MRTF = new IniFile("mailru-two-factor");
                                 if (MRTF.KeyExists("Mpop", Login) && MRTF.KeyExists("ssdc", Login))
                                 {
-                                    CookiesStorage.Add(new Cookie("Mpop", MRTF.Read("Mpop", Login), "/", ".auth.mail.ru"));
-                                    CookiesStorage.Add(new Cookie("ssdc", MRTF.Read("ssdc", Login), "/", ".auth.mail.ru"));
+                                    CookiesStorage.Add(new Cookie("Mpop", MRTF.ReadString("Mpop", Login), "/", ".auth.mail.ru"));
+                                    CookiesStorage.Add(new Cookie("ssdc", MRTF.ReadString("ssdc", Login), "/", ".auth.mail.ru"));
 
                                     //Вход в систему с информацией о кэше
                                     using (ResponseContent Response = SendRequest("https://auth.mail.ru/cgi-bin/auth",

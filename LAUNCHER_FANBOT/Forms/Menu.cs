@@ -98,26 +98,26 @@ namespace LAUNCHER_FANBOT
                 if (File.Exists(files_names[2]))
                 {
                     //Друзья
-                    ignor_friends.Checked = SettingsBots.Read("wb_accept_friend_requests", sett) == "0";
-                    ignor_friends_invite.Checked = SettingsBots.Read("wb_postpone_friend_requests", sett) == "1";
+                    ignor_friends.Checked = SettingsBots.ReadString("wb_accept_friend_requests", sett) == "0";
+                    ignor_friends_invite.Checked = SettingsBots.ReadString("wb_postpone_friend_requests", sett) == "1";
 
                     //Клан
-                    ignor_clan.Checked = SettingsBots.Read("wb_accept_clan_invites", sett) == "0";
-                    ignor_clan_invite.Checked = SettingsBots.Read("wb_postpone_clan_invites", sett) == "1";
+                    ignor_clan.Checked = SettingsBots.ReadString("wb_accept_clan_invites", sett) == "0";
+                    ignor_clan_invite.Checked = SettingsBots.ReadString("wb_postpone_clan_invites", sett) == "1";
 
                     //Комната
-                    no_exit_room.Checked = SettingsBots.Read("wb_leave_on_start", sett) == "0";
-                    start_room_k.Checked = SettingsBots.Read("wb_auto_start", sett) != "0";
+                    no_exit_room.Checked = SettingsBots.ReadString("wb_leave_on_start", sett) == "0";
+                    start_room_k.Checked = SettingsBots.ReadString("wb_auto_start", sett) != "0";
 
                     //Язык
-                    string g_language = SettingsBots.Read("g_language", sett);
+                    string g_language = SettingsBots.ReadString("g_language", sett);
                     rb_ru.Checked = g_language == "russian";
                     rb_eu.Checked = g_language == "english";
 
                     //Настройки_Автоматических_Команд
-                    if (SettingsBots.Read("AUTO_COMMAND", sett) != "")
+                    if (SettingsBots.ReadString("AUTO_COMMAND", sett) != "")
                     {
-                        textBox_nick.Text = SettingsBots.Read("AUTO_COMMAND", sett).Replace("follow", "").Replace(" ", "");
+                        textBox_nick.Text = SettingsBots.ReadString("AUTO_COMMAND", sett).Replace("follow", "").Replace(" ", "");
                         checkBox_autocmd.Checked = true;
                     }
                 }
@@ -238,8 +238,8 @@ namespace LAUNCHER_FANBOT
                             if (accounts.KeyExists(login, tmp) && accounts.KeyExists(password, tmp))
                             {
                                 richlog_info_bots.Text += $"{TimeText()} [{text_bot_1}-{i + 1}]: START..\n";
-                                textBoxes_l[i].Text = accounts.Read(login, tmp);
-                                textBoxes_p[i].Text = accounts.Read(password, tmp);
+                                textBoxes_l[i].Text = accounts.ReadString(login, tmp);
+                                textBoxes_p[i].Text = accounts.ReadString(password, tmp);
                                 comboBoxes[i].SelectedIndex = servers;
                                 button_start_Click(button_start[i], e);
                                 n_bots++;
@@ -461,7 +461,7 @@ namespace LAUNCHER_FANBOT
                                 bots_status[i - 1] = true;
                                 new Thread(delegate ()
                                 {
-                                    Start_Aut(tmp_comboBox, acc.Read(login, tmp), acc.Read(password, tmp),
+                                    Start_Aut(tmp_comboBox, acc.ReadString(login, tmp), acc.ReadString(password, tmp),
                                               button, tmp_bot, tmp_checkBox_save_data);
                                 }).Start();
                             }
@@ -677,8 +677,8 @@ namespace LAUNCHER_FANBOT
 
             byte server = serverBox(comboBox);
             IniFile account = new IniFile(files_names[3]);
-            txtl.Text = account.Read(login, $"{bot}-{server}");
-            txtp.Text = account.Read(password, $"{bot}-{server}");
+            txtl.Text = account.ReadString(login, $"{bot}-{server}");
+            txtp.Text = account.ReadString(password, $"{bot}-{server}");
         }
 
         /// <summary>
@@ -1079,16 +1079,16 @@ namespace LAUNCHER_FANBOT
                 {
                     IniFile settings_menu = new IniFile(files_names[1]);
                     //Ключи
-                    radioButton_levak_keys.Checked = bool.Parse(settings_menu.Read(radioButton_levak_keys.Name, sect));
-                    radioButton_my_keys.Checked = bool.Parse(settings_menu.Read(radioButton_my_keys.Name, sect));
+                    radioButton_levak_keys.Checked = bool.Parse(settings_menu.ReadString(radioButton_levak_keys.Name, sect));
+                    radioButton_my_keys.Checked = bool.Parse(settings_menu.ReadString(radioButton_my_keys.Name, sect));
 
                     //Режим запуска
-                    radioButton_start_classic.Checked = bool.Parse(settings_menu.Read(radioButton_start_classic.Name, sect));
-                    radioButton_start_classic_plus.Checked = bool.Parse(settings_menu.Read(radioButton_start_classic_plus.Name, sect));
+                    radioButton_start_classic.Checked = bool.Parse(settings_menu.ReadString(radioButton_start_classic.Name, sect));
+                    radioButton_start_classic_plus.Checked = bool.Parse(settings_menu.ReadString(radioButton_start_classic_plus.Name, sect));
 
                     //Скрывать лог/пасс
-                    checkBox_crt_pass.Checked = bool.Parse(settings_menu.Read(checkBox_crt_pass.Name, sect));
-                    checkBox_crt_login.Checked = bool.Parse(settings_menu.Read(checkBox_crt_login.Name, sect));
+                    checkBox_crt_pass.Checked = bool.Parse(settings_menu.ReadString(checkBox_crt_pass.Name, sect));
+                    checkBox_crt_login.Checked = bool.Parse(settings_menu.ReadString(checkBox_crt_login.Name, sect));
 
                     checkBox_crt_login_Click(null, null);
                     checkBox_crt_pass_Click(null, null);
@@ -1096,26 +1096,26 @@ namespace LAUNCHER_FANBOT
                     //Загрузка данных, Сохранение данных
                     for (int i = 0; i < 5; i++)
                     {
-                        checkBox_load_data[i].Checked = bool.Parse(settings_menu.Read(checkBox_load_data[i].Name, sect));
-                        checkBox_save_data[i].Checked = bool.Parse(settings_menu.Read(checkBox_save_data[i].Name, sect));
+                        checkBox_load_data[i].Checked = bool.Parse(settings_menu.ReadString(checkBox_load_data[i].Name, sect));
+                        checkBox_save_data[i].Checked = bool.Parse(settings_menu.ReadString(checkBox_save_data[i].Name, sect));
                     }
 
                     //Рестарт
-                    radioButton_through_time.Checked = bool.Parse(settings_menu.Read(radioButton_through_time.Name, sect));
-                    radioButton_off_proc.Checked = bool.Parse(settings_menu.Read(radioButton_off_proc.Name, sect));
+                    radioButton_through_time.Checked = bool.Parse(settings_menu.ReadString(radioButton_through_time.Name, sect));
+                    radioButton_off_proc.Checked = bool.Parse(settings_menu.ReadString(radioButton_off_proc.Name, sect));
 
                     //Режим запуска окна
-                    standart_start.Checked = bool.Parse(settings_menu.Read(standart_start.Name, sect));
-                    simple_start.Checked = bool.Parse(settings_menu.Read(simple_start.Name, sect));
-                    radioButton_pinvoke.Checked = bool.Parse(settings_menu.Read(radioButton_pinvoke.Name, sect));
+                    standart_start.Checked = bool.Parse(settings_menu.ReadString(standart_start.Name, sect));
+                    simple_start.Checked = bool.Parse(settings_menu.ReadString(simple_start.Name, sect));
+                    radioButton_pinvoke.Checked = bool.Parse(settings_menu.ReadString(radioButton_pinvoke.Name, sect));
 
                     //Режим pinvoke
-                    pinvoke_svor.Checked = bool.Parse(settings_menu.Read(pinvoke_svor.Name, sect));
-                    pinvoke_no_svor.Checked = bool.Parse(settings_menu.Read(pinvoke_no_svor.Name, sect));
-                    fon_start.Checked = bool.Parse(settings_menu.Read(fon_start.Name, sect));
+                    pinvoke_svor.Checked = bool.Parse(settings_menu.ReadString(pinvoke_svor.Name, sect));
+                    pinvoke_no_svor.Checked = bool.Parse(settings_menu.ReadString(pinvoke_no_svor.Name, sect));
+                    fon_start.Checked = bool.Parse(settings_menu.ReadString(fon_start.Name, sect));
 
                     //Язык
-                    string LANGUAGE = settings_menu.Read(comboBox_languages.Name, sect);
+                    string LANGUAGE = settings_menu.ReadString(comboBox_languages.Name, sect);
                     if (LANGUAGE != "default (russian)")
                     {
                         comboBox_languages.Text = LANGUAGE;
@@ -1124,20 +1124,20 @@ namespace LAUNCHER_FANBOT
                     LoadPrms();
 
                     //Цвет текста консоли
-                    string tmp_comboBox_text_colors = settings_menu.Read(comboBox_text_colors.Name, sect);
+                    string tmp_comboBox_text_colors = settings_menu.ReadString(comboBox_text_colors.Name, sect);
                     comboBox_text_colors.SelectedIndex = Convert.ToInt32(!string.IsNullOrWhiteSpace(tmp_comboBox_text_colors) ? tmp_comboBox_text_colors : "0");
 
                     //Логи
-                    checkBox_save_logs.Checked = bool.Parse(settings_menu.Read(checkBox_save_logs.Name, sect));
+                    checkBox_save_logs.Checked = bool.Parse(settings_menu.ReadString(checkBox_save_logs.Name, sect));
 
                     //Прозрачность
-                    string VISIBILITY = settings_menu.Read(hScrollBar_transparency.Name, sect);
+                    string VISIBILITY = settings_menu.ReadString(hScrollBar_transparency.Name, sect);
                     if (VISIBILITY != "" && Convert.ToInt32(VISIBILITY) >= 10) hScrollBar_transparency.Value = Convert.ToInt32(VISIBILITY);
 
                     //Цвета
                     for (int i = 0; i < colors.Length; i++)
                     {
-                        string tmp = settings_menu.Read($"colors_{i}", sect);
+                        string tmp = settings_menu.ReadString($"colors_{i}", sect);
                         if (!string.IsNullOrWhiteSpace(tmp))
                         {
                             colors[i] = tmp;

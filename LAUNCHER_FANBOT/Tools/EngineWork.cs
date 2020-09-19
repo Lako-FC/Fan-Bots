@@ -102,7 +102,7 @@ namespace LAUNCHER_FANBOT
                 if (write) iniFile.Write(control.Name, control.Text, name);
                 else
                 {
-                    string tmp = iniFile.Read(control.Name, name);
+                    string tmp = iniFile.ReadString(control.Name, name);
                     if (!string.IsNullOrWhiteSpace(tmp)) control.Text = tmp;
                 }
             }
@@ -122,7 +122,7 @@ namespace LAUNCHER_FANBOT
             for (int i = 0; i < prms.Length; i++) tmp += $"{$">prms_{i}"} = {prms[i]}\n";
             Clipboard.SetText(tmp); 
 #else
-            for (int i = 0; i < prms.Length; i++) SetValue(iniFile.Read($">prms_{i}", name), ref prms[i]);
+            for (int i = 0; i < prms.Length; i++) SetValue(iniFile.ReadString($">prms_{i}", name), ref prms[i]);
 #endif
         }
 
