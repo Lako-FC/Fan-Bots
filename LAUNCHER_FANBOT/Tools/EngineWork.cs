@@ -11,8 +11,19 @@ namespace LAUNCHER_FANBOT
 {
     public class EngineWork
     {
+        /// <summary>
+        /// Глобальная Random переменная.
+        /// </summary>
         public readonly Random random = new Random(Environment.TickCount);
+
+        /// <summary>
+        /// bool переменная для проверки, запуск является первым или нет.
+        /// </summary>
         private bool one_start = false;
+
+        /// <summary>
+        /// Список параметров для загрузки / сохранения файла конфигурации.
+        /// </summary>
         public string[] prms = new string[]
         {
             "Введите автоматическую команду",
@@ -41,10 +52,29 @@ namespace LAUNCHER_FANBOT
             "Светло-синий"
         };
 
+        /// <summary>
+        /// Вызов MessageBox.Show(...) с готовыми параметрами показа информации.
+        /// </summary>
         public void MSB_Information(string text, string caption) => MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+        /// <summary>
+        /// Вызов MessageBox.Show(...) с готовыми параметрами показа ошибки.
+        /// </summary>
         public void MSB_Error(string er, string caption = "Ошибка..") => MessageBox.Show(er, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+        /// <summary>
+        /// Установка значения <c>value</c> в <c>set</c> (ссылка), после проверки IsNullOrWhiteSpace(value). 
+        /// </summary>
+        /// <param name="value">Значение.</param>
+        /// <param name="set">Ссылка на переменную, которой будет присвоено новое значение.</param>
         public void SetValue(string value, ref string set) { if (!string.IsNullOrWhiteSpace(value)) set = value; }
 
+
+        /// <summary>
+        /// Получение исходного кода страницы.
+        /// </summary>
+        /// <param name="url">URL сайта.</param>
+        /// <returns>Исходный код страницы сайта (html) в виде string.</returns>
         public static string GET(string url)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -58,6 +88,13 @@ namespace LAUNCHER_FANBOT
 
             return res;
         }
+
+        /// <summary>
+        /// Получение всех контролов формы, далее присваивание им значения (.Text = value).
+        /// </summary>
+        /// <param name="control">Форма.</param>
+        /// <param name="name">Название секции.</param>
+        /// <param name="write">Запись или же чтение.</param>
         public void GetAllControls(Control control, IniFile iniFile, string name, bool write)
         {
             if (!string.IsNullOrWhiteSpace(control.Text))
@@ -72,6 +109,12 @@ namespace LAUNCHER_FANBOT
             foreach (Control tmp_control in control.Controls) GetAllControls(tmp_control, iniFile, name, write);
         }
 
+
+        /// <summary>
+        /// Установка параметров в массив prms[] из файла iniFile, или же при DEBUG режиме чтение параметров и запись в буфер обмена.
+        /// </summary>
+        /// <param name="menu">Ссылка на Menu.</param>
+        /// <param name="name">Название секции.</param>
         private void GetAllPrms(Menu menu, IniFile iniFile, string name)
         {
 #if DEBUG
@@ -82,11 +125,26 @@ namespace LAUNCHER_FANBOT
             for (int i = 0; i < prms.Length; i++) SetValue(iniFile.Read($">prms_{i}", name), ref prms[i]);
 #endif
         }
+
+        /// <summary>
+        /// Получение всех контролов на форме, далее запись их в переменную <c>get_controls_list</c>.
+        /// </summary>
+        /// <param name="get_controls_list">Переменная для записи списока контролов.</param>
+        /// <param name="control">Форма.</param>
+        /// <param name="type">Тип контрола (control.GetType()).</param>
         public void GetAllControls_ForSettings(List<Control> get_controls_list, Control control, Type type)
         {
             if (control.GetType() == type) get_controls_list.Add(control);
             foreach (Control ctrlChild in control.Controls) GetAllControls_ForSettings(get_controls_list, ctrlChild, type);
         }
+
+        /// <summary>
+        ///  Метод для установки (.Text = string) перевода на контролы или же перезапуск приложения.
+        /// </summary>
+        /// <param name="control_cont">Форма.</param>
+        /// <param name="translation">Переводить на английский или же перезапуск приложения.</param>
+        /// <param name="file">Имя файла.</param>
+        /// <param name="name">Название секции.</param>
         public void Translation(Control control_cont, bool translation, string file, string name)
         {
             Menu menu = (Menu)control_cont;

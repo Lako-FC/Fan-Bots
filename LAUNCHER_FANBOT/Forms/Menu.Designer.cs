@@ -1967,7 +1967,7 @@ namespace LAUNCHER_FANBOT
             this.radioButton_start_classic_plus.TabStop = true;
             this.radioButton_start_classic_plus.Text = "Консольный";
             this.radioButton_start_classic_plus.UseVisualStyleBackColor = true;
-            this.radioButton_start_classic_plus.CheckedChanged += new System.EventHandler(this.radioButton_start_classic_plus_CheckedChanged);
+            this.radioButton_start_classic_plus.CheckedChanged += new System.EventHandler(this.comboBox_text_colors_Enabled_CheckedChanged);
             // 
             // radioButton_start_classic
             // 
@@ -1978,7 +1978,7 @@ namespace LAUNCHER_FANBOT
             this.radioButton_start_classic.TabIndex = 0;
             this.radioButton_start_classic.Text = "Прямой";
             this.radioButton_start_classic.UseVisualStyleBackColor = true;
-            this.radioButton_start_classic.CheckedChanged += new System.EventHandler(this.radioButton_start_classic_CheckedChanged);
+            this.radioButton_start_classic.CheckedChanged += new System.EventHandler(this.comboBox_text_colors_Enabled_CheckedChanged);
             // 
             // page_info
             // 

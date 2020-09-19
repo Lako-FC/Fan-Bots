@@ -9,8 +9,14 @@ namespace AUTHORIZATION
     public class GoPlay
     {
         private readonly int cpId = 1000;
-        private readonly string client_id = "AAER47Ux4Yb1BCeoPGxODVEjGq25cKwOOklTHEIE", client_secret = "7YzKxfLpp3HYnyQY0HMeRXE8ijIblNsJ5adnABe3O0iHvAdnAClQRXs3vcAoMu", redirect_uri = "http://goplay.vn";
+        private readonly string 
+            client_id = "AAER47Ux4Yb1BCeoPGxODVEjGq25cKwOOklTHEIE", 
+            client_secret = "7YzKxfLpp3HYnyQY0HMeRXE8ijIblNsJ5adnABe3O0iHvAdnAClQRXs3vcAoMu", 
+            redirect_uri = "http://goplay.vn";
 
+        /// <summary>
+        /// Отправка POST запроса.
+        /// </summary>
         private string POST(string Url, string Data)
         {
             WebRequest req = WebRequest.Create(Url);
@@ -37,6 +43,9 @@ namespace AUTHORIZATION
             }
             return Out;
         }
+        /// <summary>
+        /// Отправка GET запроса.
+        /// </summary>
         private string GET(string Url, string Data)
         {
             WebRequest req = WebRequest.Create(Url + "?" + Data);
@@ -48,7 +57,7 @@ namespace AUTHORIZATION
             sr.Close();
             return Out;
         }
-        private static string md5_hash(string text)
+        private static string MD5_Hash(string text)
         {
             byte[] hash = Encoding.ASCII.GetBytes(text);
             MD5 md5 = new MD5CryptoServiceProvider();
@@ -57,6 +66,13 @@ namespace AUTHORIZATION
             foreach (byte b in hashenc) result += b.ToString("x2");
             return result;
         }
+
+        /// <summary>
+        /// Авторизация
+        /// </summary>
+        /// <param name="login">Логин.</param>
+        /// <param name="password">Пароль.</param>
+        /// <returns>Результат авторизации.</returns>
         public string[] AuthGoPlay(string login, string password)
         {
             string CID = "?client_id=" + client_id + "&client_secret=" + client_secret;
@@ -75,7 +91,7 @@ namespace AUTHORIZATION
                 Regex _dataRG = new Regex("_data\":\"(.*)\",");
                 string _data = _dataRG.Match(SaltRes.ToString()).Groups[1].Value;
 
-                string hashed_pwd = md5_hash(login + md5_hash(password) + _data);
+                string hashed_pwd = MD5_Hash(login + MD5_Hash(password) + _data);
 
                 l = "username=" + login + "&password=" + hashed_pwd + "&cpId=" + cpId + "&ip=" + ip;
                 string AuthRes = POST("http://billing.graph.go.vn/authentication/login" + CID, l);

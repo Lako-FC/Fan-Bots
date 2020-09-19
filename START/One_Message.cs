@@ -18,6 +18,7 @@ namespace START
         private readonly List<Color> colors = new List<Color>() { Color.Green, Color.Red, Color.Purple, Color.Coral };
         #endregion
 
+        //Инициализация
         public One_Message()
         {
             InitializeComponent();
@@ -25,7 +26,19 @@ namespace START
             richTextBox_info.ReadOnly = true;
             richTextBox_use_conditions.ReadOnly = true;
         }
+
+        /// <summary>
+        /// Завершение данного процесса и его потоков.
+        /// </summary>
         private void Exit(object sender, EventArgs e) => Environment.Exit(0);
+
+        /// <summary>
+        /// Изменяет страницу меню 
+        /// (0 - информационная страница и выбор языка, 
+        ///  1 - условия использования,
+        ///  2 - важная информация и соглашение).
+        /// </summary>
+        /// <param name="id">ID страницы.</param>
         private void ChangePage(byte id)
         {
             g_id = id;
@@ -68,6 +81,10 @@ namespace START
             label_info_sec.Text = "0";
             timer_sec = 30;
         }
+
+        /// <summary>
+        /// 30 секунд ада для пользователя, который не любит читать.
+        /// </summary>
         private void timer_check_Tick(object sender, EventArgs e)
         {
             timer_sec--;
@@ -89,10 +106,19 @@ namespace START
                 button_next2.Enabled = false;
             }
         }
+
+        /// <summary>
+        /// Вызов Translation_English() для перевода текста в контролах.
+        /// </summary>
         private void radioButton_english_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButton_english.Checked) Translation_English();
         }
+
+        /// <summary>
+        /// Если radioButton_russian.Checked == true, 
+        /// то вызывается запуск копия данного процесса, после этого завершается основной процесс.
+        /// </summary>
         private void radioButton_russian_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButton_russian.Checked && button_exit1.Text != "Отмена")
@@ -102,16 +128,27 @@ namespace START
             }
         }
 
+        /// <summary>
+        /// Переключение ВПЕРЕД на 1-ую страницу (условия использования).
+        /// </summary>
         private void button_next1_Click(object sender, EventArgs e)
         {
             ChangePage(1);
             timer_check.Start();
         }
+
+        /// <summary>
+        /// Переключение ВПЕРЕД на 2-ую страницу (важная информация и соглашение) или же выход и запуск лаунчера.
+        /// </summary>
         private void button_next2_Click(object sender, EventArgs e)
         {
             ChangePage(g_id == 1 ? (byte)2 : (byte)3);
             timer_check.Start();
         }
+
+        /// <summary>
+        /// Переключение НАЗАД на 0-ую страницу (информационная страница и выбор языка) или на 1-ую страницу (условия использования).
+        /// </summary>
         private void button_exit2_Click(object sender, EventArgs e)
         {
             ChangePage(g_id == 1 ? (byte)0 : (byte)1);
@@ -119,6 +156,9 @@ namespace START
             button_next2.Enabled = true;
         }
 
+        /// <summary>
+        /// Метод для установки (.Text = string) перевода на контролы.
+        /// </summary>
         private void Translation_English()
         {
             label_select_lang.Text = "Language";
@@ -185,6 +225,10 @@ namespace START
 
             no_ok = "You didn't agree, so you can't use Fan-Bot's.\nOf course you can restart Fan-Bot's and change your mind.";
         }
+
+        /// <summary>
+        /// Проверка запущенных копий и их уничтожение для перезапуска, далее запуск files[0] (launcher.exe).
+        /// </summary>
         public void Start()
         {
             try

@@ -85,7 +85,6 @@ namespace AUTHORIZATION
                 Close();
             }
         }
-
         private void GetCSRFAndCaptcha(MailRu.ResponseContent Response)
         {
             CSRF = new Regex("\"csrf\":\"([^,]+)\"").Match(Response.Body).Groups[1].Value;
@@ -109,9 +108,6 @@ namespace AUTHORIZATION
                 }
             }
         }
-
-        #region
-
         private void CodeTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -120,7 +116,5 @@ namespace AUTHORIZATION
                 e.SuppressKeyPress = false;
             }
         }
-
-        #endregion
     }
 }

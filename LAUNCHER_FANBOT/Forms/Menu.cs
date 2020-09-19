@@ -12,8 +12,7 @@ namespace LAUNCHER_FANBOT
 {
     public partial class Menu : Form
     {
-        #region Переменные
-
+        #region ПЕРЕМЕННЫЕ
         private readonly EngineWork EngineWork = new EngineWork();
 
         private const string text_bot_1 = "БОТ";
@@ -39,6 +38,10 @@ namespace LAUNCHER_FANBOT
         public string[] files_names = new string[4] { "wb.exe", "setting_launcher_fanbot.ini", "setting_bots.ini", "accounts.ini" };
         private readonly string auto_command = "auto_command.txt";
 
+        /// <summary>
+        /// Получение текущего времени.
+        /// </summary>
+        /// <returns>Текущее время (HH:mm:ss).</returns>
         private string TimeText() => $"{DateTime.Now:HH:mm:ss}";
 
         private bool check = false;
@@ -47,6 +50,11 @@ namespace LAUNCHER_FANBOT
         #endregion Переменные
 
 #if DEBUG
+        /// <summary>
+        /// Получение всех контролов на форме и запись в файл '__LANG.ini'.
+        /// </summary>
+        /// <param name="control_cont">Форма.</param>
+        /// <param name="name">Название секции.</param>
         public void GET_CONTROLS_LANG(Control control_cont, string name)
         {
             try
@@ -58,6 +66,7 @@ namespace LAUNCHER_FANBOT
         }
 #endif
 
+        //Инициализация
         public Menu()
         {
             InitializeComponent();
@@ -84,6 +93,7 @@ namespace LAUNCHER_FANBOT
 
             try
             {
+                //Загрузка настроек для wb.exe
                 IniFile SettingsBots = new IniFile(files_names[2]);
                 if (File.Exists(files_names[2]))
                 {
@@ -114,12 +124,22 @@ namespace LAUNCHER_FANBOT
             }
             catch (Exception er) { EngineWork.MSB_Error(er.ToString(), "[Menu -> Загрузка настроек ботов]"); }
         }
+
+        /// <summary>
+        /// При закрытии формы - сохраняет настройки, далее завершает процесс и его потоки.
+        /// </summary>
         private void Menu_FormClosed(object sender, FormClosedEventArgs e)
         {
             SaveSettings(null, null);
             SettingsSave_settings_bots();
             Environment.Exit(0);
         }
+        /// <summary>
+        /// Изменяет страницу меню 
+        /// (0 - меню, 
+        ///  1 - настройка ботов).
+        /// </summary>
+        /// <param name="id">ID страницы.</param>
         private void ChangePage(byte id)
         {
             tabControl_main.Visible = false;
@@ -144,16 +164,14 @@ namespace LAUNCHER_FANBOT
                 settings_back.Location = new Point(10, 340);
             }
         }
-        private void settings_back_Click(object sender, EventArgs e)
-        {
-            ChangePage(0);
-            SettingsSave_settings_bots();
-        }
 
         #region tabControl_main
 
         #region FORM_CONTROLS
 
+        /// <summary>
+        /// Сброс настроек (удаление файлов) и перезапуск приложения.
+        /// </summary>
         private void button_delete_setting_Click(object sender, EventArgs e)
         {
             File.Delete(files_names[1]);
@@ -192,6 +210,9 @@ namespace LAUNCHER_FANBOT
 
             comboBox_bots_server.Enabled = true;
         }
+        /// <summary>
+        /// Запуск всех доступных ботов.
+        /// </summary>
         private void button_start_all_bots_Click(object sender, EventArgs e)
         {
             if (comboBox_bots_server.SelectedIndex == -1)
@@ -230,6 +251,9 @@ namespace LAUNCHER_FANBOT
                 catch (Exception er) { EngineWork.MSB_Error(er.ToString(), "[button_start_all_bots_Click]"); }
             }
         }
+        /// <summary>
+        /// Запуск бота по определению кнопки.
+        /// </summary>
         private void button_start_Click(object sender, EventArgs e)
         {
             Button button = sender as Button;
@@ -256,6 +280,9 @@ namespace LAUNCHER_FANBOT
             }
             catch (Exception er) { EngineWork.MSB_Error(er.ToString(), "[button_start_Click]"); }
         }
+        /// <summary>
+        /// Удаление данных для определенного сервера и бота.
+        /// </summary>
         private void button_del_server_Click(object sender, EventArgs e)
         {
             Button button = sender as Button;
@@ -269,6 +296,9 @@ namespace LAUNCHER_FANBOT
 
             DeleteDataServer($"{text_bot_2}{tmp}", comboBoxes[tmp]);
         }
+        /// <summary>
+        /// Удаление всех данных определенного бота.
+        /// </summary>
         private void button_del_bot_Click(object sender, EventArgs e)
         {
             Button button = sender as Button;
@@ -285,8 +315,21 @@ namespace LAUNCHER_FANBOT
 
             DeleteAllData($"{text_bot_2}{tmp}");
         }
+        /// <summary>
+        /// Переключение страницы на страницу настроек ботов.
+        /// </summary>
         private void button_settings_bots_Click(object sender, EventArgs e) => ChangePage(1);
-
+        /// <summary>
+        /// Возврат на 0-ую (меню) страницу и сохранение настроек ботов.
+        /// </summary>
+        private void settings_back_Click(object sender, EventArgs e)
+        {
+            ChangePage(0);
+            SettingsSave_settings_bots();
+        }
+        /// <summary>
+        /// Цвет RichTextBox (где логи) фона.
+        /// </summary>
         private void button_color_console_Click(object sender, EventArgs e)
         {
             bool save_color = sender != null && e != null;
@@ -300,6 +343,9 @@ namespace LAUNCHER_FANBOT
 
             if (save_color) colors[0] = ColorTranslator.ToHtml(color);
         }
+        /// <summary>
+        /// Шрифт для RichTextBox (где логи).
+        /// </summary>
         private void button_setting_font_Click(object sender, EventArgs e)
         {
             bool save_color = sender != null && e != null;
@@ -313,6 +359,9 @@ namespace LAUNCHER_FANBOT
 
             if (save_color) colors[1] = ColorTranslator.ToHtml(color);
         }
+        /// <summary>
+        /// Цвет фона формы.
+        /// </summary>
         private void button_color_fon_Click(object sender, EventArgs e)
         {
             bool save_color = sender != null && e != null;
@@ -327,6 +376,9 @@ namespace LAUNCHER_FANBOT
 
             if (save_color) colors[2] = ColorTranslator.ToHtml(color);
         }
+        /// <summary>
+        /// Цвет фона всех кнопок.
+        /// </summary>
         private void button_colors_fon_Click(object sender, EventArgs e)
         {
             bool save_color = sender != null && e != null;
@@ -340,6 +392,9 @@ namespace LAUNCHER_FANBOT
 
             if (save_color) colors[3] = ColorTranslator.ToHtml(color);
         }
+        /// <summary>
+        /// Цвет текста на всех кнопках.
+        /// </summary>
         private void button_colors_text_Click(object sender, EventArgs e)
         {
             bool save_color = sender != null && e != null;
@@ -353,6 +408,9 @@ namespace LAUNCHER_FANBOT
 
             if (save_color) colors[4] = ColorTranslator.ToHtml(color);
         }
+        /// <summary>
+        /// Очистка логов (файлы *.log).
+        /// </summary>
         private void button_clear_logs_Click(object sender, EventArgs e)
         {
             try
@@ -373,6 +431,10 @@ namespace LAUNCHER_FANBOT
             catch (Exception er) { EngineWork.MSB_Error(er.ToString(), "[button_clear_logs]"); }
         }
 
+
+        /// <summary>
+        /// Таймер для рестарта ботов.
+        /// </summary>
         private void timer_restart_Tick(object sender, EventArgs e)
         {
             byte server = serverBox(comboBox_bots_server);
@@ -409,6 +471,9 @@ namespace LAUNCHER_FANBOT
             }
             catch (Exception er) { EngineWork.MSB_Error(er.ToString(), "[timer_start_bots_Tick]"); }
         }
+        /// <summary>
+        /// Таймер проверки данных (логин\пароль) ботов.
+        /// </summary>
         private void timer_check_data_Tick(object sender, EventArgs e)
         {
             if (File.Exists(files_names[3]))
@@ -444,15 +509,25 @@ namespace LAUNCHER_FANBOT
             }
         }
 
+
+        /// <summary>
+        /// Выбор сервера, далее загрузка сохраненных данных, если они есть.
+        /// </summary>
         private void comboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox comboBox = sender as ComboBox;
 
-            for (int i = 0; i < 5; i++) if (comboBox == comboBoxes[i]) LoadAccount(comboBox, $"{text_bot_2}{i + 1}", checkBox_load_data[i], textBoxes_l[i], textBoxes_p[i]);
+            for (int i = 0; i < 5; i++) if (comboBox == comboBoxes[i]) 
+                    LoadAccount(comboBox, $"{text_bot_2}{i + 1}", checkBox_load_data[i], textBoxes_l[i], textBoxes_p[i]);
         }
         private void comboBox_KeyPress(object sender, KeyPressEventArgs e) => e.Handled = true;
+        /// <summary>
+        /// Выбор файла с переводом, далее его загрузка.
+        /// </summary>
         private void comboBox_languages_SelectedIndexChanged(object sender, EventArgs e) => EngineWork.Translation(this, !comboBox_languages.Text.Contains("default"), comboBox_languages.Text, Name);
-
+        /// <summary>
+        /// Стандартный режим запуска: groupBox_bot_N.Enabled = standart_start.Checked.
+        /// </summary>
         private void standart_start_CheckedChanged(object sender, EventArgs e)
         {
             bool tmp = standart_start.Checked;
@@ -463,16 +538,30 @@ namespace LAUNCHER_FANBOT
             groupBox_bot_4.Enabled = tmp;
             groupBox_bot_5.Enabled = tmp;
         }
+
+        /// <summary>
+        /// Установка UseSystemPasswordChar для полей <c>login</c>.
+        /// </summary>
         private void checkBox_crt_login_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < 5; i++) textBoxes_l[i].UseSystemPasswordChar = checkBox_crt_login.Checked;
         }
+        /// <summary>
+        /// Установка UseSystemPasswordChar для полей <c>password</c>.
+        /// </summary>
         private void checkBox_crt_pass_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < 5; i++) textBoxes_p[i].UseSystemPasswordChar = checkBox_crt_pass.Checked;
         }
-        private void radioButton_start_classic_CheckedChanged(object sender, EventArgs e) => comboBox_text_colors.Enabled = radioButton_start_classic_plus.Checked;
-        private void radioButton_start_classic_plus_CheckedChanged(object sender, EventArgs e) => comboBox_text_colors.Enabled = radioButton_start_classic_plus.Checked;
+
+        /// <summary>
+        /// Если режима запуска <c>Прямой</c>, то выбор цвета текста в cmd становится недоступным, 
+        /// иначе если режим запуска <c>Консольный</c>, то выбор цвета текста в cmd становится доступным.
+        /// </summary>
+        private void comboBox_text_colors_Enabled_CheckedChanged(object sender, EventArgs e) => comboBox_text_colors.Enabled = radioButton_start_classic_plus.Checked;
+        /// <summary>
+        /// Выбор всех доступных ботов.
+        /// </summary>
         private void checkBox_bots_all_CheckedChanged(object sender, EventArgs e)
         {
             for (int i = 0; i < checkBox_bots.Length; i++) if (checkBox_bots[i].Enabled == true) checkBox_bots[i].Checked = true;
@@ -489,6 +578,9 @@ namespace LAUNCHER_FANBOT
         private void label_link_vk_fanbots_Click(object sender, EventArgs e) => pictureBox_link_fanbots_Click(null, null);
         private void pictureBox_link_funcode_Click(object sender, EventArgs e) => Process.Start("https://vk.com/official_funcode");
         private void pictureBox_link_fanbots_Click(object sender, EventArgs e) => Process.Start("https://vk.com/fanbots_wf");
+        /// <summary>
+        /// Очистка текста в определенном RichTextBox.
+        /// </summary>
         private void pictureBox_clear_log_Click(object sender, EventArgs e)
         {
             PictureBox picturebox = sender as PictureBox;
@@ -501,19 +593,32 @@ namespace LAUNCHER_FANBOT
             else if (picturebox == pictureBox_clear_log_all) richlog_info_bots.Clear();
         }
 
+        /// <summary>
+        /// Если пользователь вышел со вкладки <c>ГЛОБАЛ НАСТРОЙКИ</c>, то сохраняем настройки.
+        /// </summary>
         private void tabControl_main_Deselecting(object sender, TabControlCancelEventArgs e)
         {
             if (tabControl_main.SelectedTab == tabControl_main.TabPages[6]) SaveSettings(null, null);
         }
+        /// <summary>
+        /// Если пользователь перешел на вкладку в БОТ-S, то запускаем проверку данных.
+        /// </summary>
         private void tabControl_main_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabControl_main.SelectedTab == tabControl_main.TabPages[5] && timer_check_data.Enabled == false) timer_check_data.Start();
         }
+        /// <summary>
+        /// Изменение прозрачности формы.
+        /// </summary>
         private void hScrollBar1_ValueChanged(object sender, EventArgs e)
         {
             label_n.Text = $"{hScrollBar_transparency.Value}%";
             Opacity = hScrollBar_transparency.Value * 0.01;
         }
+
+        /// <summary>
+        /// Отправка команды определенному боту (процессу).
+        /// </summary>
         private void textBox_cmd_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -534,8 +639,20 @@ namespace LAUNCHER_FANBOT
 
         #region OTHER
 
+        /// <summary>
+        /// Получение ID сервера.
+        /// </summary>
+        /// <returns>ID сервера.</returns>
         private byte serverBox(ComboBox c) => c.SelectedIndex != -1 ? (byte)c.SelectedIndex : (byte)8;
 
+        /// <summary>
+        /// Сохранение данных аккаунта.
+        /// </summary>
+        /// <param name="lg">Логин.</param>
+        /// <param name="ps">Пароль.</param>
+        /// <param name="comboBox">comboBox, с которого будем узнавать ID выбранного сервера.</param>
+        /// <param name="bot">Бот.</param>
+        /// <param name="checkBox">Проверка, нужно ли сохранять данные или нет.</param>
         private void SaveAccount(string lg, string ps, ComboBox comboBox, string bot, CheckBox checkBox)
         {
             if (!checkBox.Checked) return;
@@ -546,16 +663,29 @@ namespace LAUNCHER_FANBOT
             account.Write(login, lg, $"{bot}-{server}");
             account.Write(password, ps, $"{bot}-{server}");
         }
-        private void LoadAccount(ComboBox cbx, string bot, CheckBox chk, TextBox txtl, TextBox txtp)
+        /// <summary>
+        /// Загрузка данных аккаунта.
+        /// </summary>
+        /// <param name="comboBox">comboBox, с которого будем узнавать ID выбранного сервера.</param>
+        /// <param name="bot">Бот.</param>
+        /// <param name="checkBox">Проверка, нужно ли сохранять данные или нет.</param>
+        /// <param name="txtl">TextBox, куда нужно загружать сохраненный логин.</param>
+        /// <param name="txtp">TextBox, куда нужно загружать сохраненный пароль.</param>
+        private void LoadAccount(ComboBox comboBox, string bot, CheckBox checkBox, TextBox txtl, TextBox txtp)
         {
-            if (!chk.Checked) return;
+            if (!checkBox.Checked) return;
 
-            byte server = serverBox(cbx);
+            byte server = serverBox(comboBox);
             IniFile account = new IniFile(files_names[3]);
             txtl.Text = account.Read(login, $"{bot}-{server}");
             txtp.Text = account.Read(password, $"{bot}-{server}");
         }
 
+        /// <summary>
+        /// Удаление данных аккаунта с определенного сервера и бота, также удаление <c>mailru-two-factor</c>.
+        /// </summary>
+        /// <param name="bot">Бот.</param>
+        /// <param name="comboBox">comboBox, с которого будем узнавать ID выбранного сервера.</param>
         private void DeleteDataServer(string bot, ComboBox comboBox)
         {
             try
@@ -567,6 +697,10 @@ namespace LAUNCHER_FANBOT
             }
             catch (Exception er) { EngineWork.MSB_Error(er.ToString(), "[DeleteDataServer]"); }
         }
+        /// <summary>
+        /// Удаление всех данных аккаунта с определенного бота.
+        /// </summary>
+        /// <param name="bot">Бот.</param>
         private void DeleteAllData(string bot)
         {
             try
@@ -582,6 +716,12 @@ namespace LAUNCHER_FANBOT
             catch (Exception er) { EngineWork.MSB_Error(er.ToString(), "[DeleteAllData]"); }
         }
 
+        /// <summary>
+        /// Проверка процесса, если он запущен, то возврат, иначе запуск нового.
+        /// </summary>
+        /// <param name="argm">Аргументы запуска.</param>
+        /// <param name="bot">Бот.</param>
+        /// <param name="id_bot">ID бота.</param>
         private void CheckMyProc(string argm, string bot, int id_bot)
         {
             if (processes_bots[id_bot] != null && !processes_bots[id_bot].HasExited) return;
@@ -603,6 +743,9 @@ namespace LAUNCHER_FANBOT
             proc.Start();
             proc.BeginOutputReadLine();
         }
+        /// <summary>
+        /// Получение и вывод информации с процесса в определенный RichTextBox.
+        /// </summary>
         private void ConsoleOutputHandler(object sendingProcess, DataReceivedEventArgs Data)
         {
             IniFile FollowBoss = new IniFile(files_names[2]);
@@ -660,26 +803,37 @@ namespace LAUNCHER_FANBOT
                         }
                     }
                     catch (Exception er) { EngineWork.MSB_Error(er.ToString(), "[[rich?.Invoke]"); }
-
                 });
             }
             catch (Exception er) { EngineWork.MSB_Error(er.ToString(), "[ConsoleOutputHandler]"); }
         }
 
-        private void WriteCmd(RichTextBox rch, TextBox txb, Process proc, bool delete_cmd, string text = "")
+        /// <summary>
+        /// Отправка команды определенному процессу.
+        /// </summary>
+        /// <param name="richTextBox">richTextBox, куда возвращать информацию о выполнении.</param>
+        /// <param name="textBox">textBox, откуда брать текст команды.</param>
+        /// <param name="proc">Процесс, которому нужно отправлять команду.</param>
+        /// <param name="delete_cmd">Очищать textBox с текстом команды или нет.</param>
+        /// <param name="text">Текст команды.</param>
+        private void WriteCmd(RichTextBox richTextBox, TextBox textBox, Process proc, bool delete_cmd, string text = "")
         {
             try
             {
                 if (proc == null || proc.HasExited) return;
-                if (txb != null)
+                if (textBox != null)
                 {
-                    proc.StandardInput.WriteLine(Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(txb.Text.Replace(Environment.NewLine, null))));
-                    if (delete_cmd) txb.Clear();
+                    proc.StandardInput.WriteLine(Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(textBox.Text.Replace(Environment.NewLine, null))));
+                    if (delete_cmd) textBox.Clear();
                 }
                 else proc.StandardInput.WriteLine(Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(text.Replace(Environment.NewLine, null))));
             }
-            catch (Exception er) { rch.Text += $"[WriteCmd]: {er}\n"; }
+            catch (Exception er) { richTextBox.Text += $"[WriteCmd]: {er}\n"; }
         }
+        /// <summary>
+        /// Отправка всем доступным ботам одной команды.
+        /// </summary>
+        /// <param name="bot">Бот.</param>
         private void WriteCmd_All(string bot)
         {
             if (bot != "all") SendCmd(Convert.ToInt32(bot));
@@ -703,6 +857,11 @@ namespace LAUNCHER_FANBOT
             textBox_cmd_all.Clear();
         }
 
+        /// <summary>
+        /// Сохранение логов для определенного бота.
+        /// </summary>
+        /// <param name="bot">Бот.</param>
+        /// <param name="text">Лог.</param>
         private void SaveLogs(string bot, string text)
         {
             string tmp_logs = "Logs";
@@ -715,6 +874,14 @@ namespace LAUNCHER_FANBOT
             }
             catch { }
         }
+
+        /// <summary>
+        /// Создание и запуск процесса бота.
+        /// </summary>
+        /// <param name="id_bot">ID бота.</param>
+        /// <param name="token">Токен аккаунта.</param>
+        /// <param name="id">ID аккаунта.</param>
+        /// <param name="server">Сервер.</param>
         private void OpenCMD(int id_bot, string token, string id, string server)
         {
             try
@@ -763,6 +930,15 @@ namespace LAUNCHER_FANBOT
             }
             catch (Exception er) { EngineWork.MSB_Error($"Ошибка запуска CMD!\n{er}", "[OpenCMD]"); bots_status[id_bot] = false; }
         }
+        /// <summary>
+        /// Авторизация аккаунта.
+        /// </summary>
+        /// <param name="comboBox">Сервер.</param>
+        /// <param name="login">Логин.</param>
+        /// <param name="password">Пароль.</param>
+        /// <param name="button">Кнопка бота.</param>
+        /// <param name="bot">Бот.</param>
+        /// <param name="checkBox">Сохранять данные аккаунта при успешной авторизации или же нет.</param>
         private void Start_Aut(ComboBox comboBox, string login, string password, Button button, string bot, CheckBox checkBox)
         {
             int tmp = 0; comboBox.Invoke((MethodInvoker)delegate { tmp = comboBox.SelectedIndex; });
@@ -825,10 +1001,16 @@ namespace LAUNCHER_FANBOT
             catch (Exception er) { EngineWork.MSB_Error(er.ToString(), "[Start_Aut]"); bots_status[id_bot] = false; }
         }
 
+        /// <summary>
+        /// Получение файлов с переводом.
+        /// </summary>
         private void GetFilesLanguage()
         {
             foreach (string file in Directory.GetFiles("language")) comboBox_languages.Items.Add(file);
         }
+        /// <summary>
+        /// Сохранение настроек лаунчера.
+        /// </summary>
         private void SaveSettings(object sender, EventArgs e)
         {
             try
@@ -886,6 +1068,9 @@ namespace LAUNCHER_FANBOT
             }
             catch (Exception er) { EngineWork.MSB_Error($"Ошибка сохранения настроек!\n{er}", "[SaveSettings]"); }
         }
+        /// <summary>
+        /// Загрузка настроек лаунчера.
+        /// </summary>
         private void LoadSettings()
         {
             try
@@ -992,6 +1177,9 @@ namespace LAUNCHER_FANBOT
 
             if (!File.Exists(auto_command)) File.Create(auto_command);
         }
+        /// <summary>
+        /// Загрузка параметров (.Text) для контролов.
+        /// </summary>
         public void LoadPrms()
         {
             try
@@ -1014,11 +1202,17 @@ namespace LAUNCHER_FANBOT
         #region panel_page_settings_bots
 
         private int line = 0;
+        /// <summary>
+        /// Удаление автоматических команд.
+        /// </summary>
         private void pictureBox_clear_command_Click(object sender, EventArgs e)
         {
             File.WriteAllText(auto_command, string.Empty);
             EngineWork.MSB_Information("Автоматические команды удалены!", "Автоматические команды");
         }
+        /// <summary>
+        /// Добавление команды в автоматические команды.
+        /// </summary>
         private void pictureBox_add_command_Click(object sender, EventArgs e)
         {
             line++;
@@ -1028,6 +1222,9 @@ namespace LAUNCHER_FANBOT
                 EngineWork.MSB_Information($"{textBox_auto_command.Text}\nID: {line}", "Автоматические команды");
             }
         }
+        /// <summary>
+        /// Сохранение настроек ботов.
+        /// </summary>
         private void SettingsSave_settings_bots()
         {
             try

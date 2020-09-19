@@ -14,11 +14,18 @@ namespace AUTHORIZATION
     public class MailRu
     {
         public static bool Logging = true;
+
+        /// <summary>
+        /// Авторизация
+        /// </summary>
+        /// <param name="login">Логин.</param>
+        /// <param name="password">Пароль.</param>
+        /// <returns>Результат авторизации.</returns>
         public string[] AuthMailRu(string Login, string Password, Button button, byte Server)
         {
             try
             {
-                try { if (File.Exists("MailRuAuthLog.log")) File.Delete("MailRuAuthLog.log"); } catch { } //Временная заглушка
+                try { if (File.Exists("MailRuAuthLog.log")) File.Delete("MailRuAuthLog.log"); } catch { }
 
                 ButtonWorked(button, false);
 
@@ -29,7 +36,7 @@ namespace AUTHORIZATION
 
                 if (Login.ToLower().Contains("@mail.ru") || Login.ToLower().Contains("@inbox.ru") || Login.ToLower().Contains("@list.ru") || Login.ToLower().Contains("@bk.ru"))
                 {
-                    //Getting state Cookie and ClientID
+                    //Получение Cookie и ClientID
                     string state;
                     string clientid;
                     using (ResponseContent Response = SendRequest("https://auth-ac.my.games/social/mailru", RequestMethods.Auto, true, CookiesStorage))
@@ -39,18 +46,18 @@ namespace AUTHORIZATION
                         if (string.IsNullOrEmpty(state) || string.IsNullOrEmpty(clientid)) throw new Exception(L10n.initialstatetokens_error);
                     }
 
-                    //Getting act and mrcu Cookies
+                    //Получение act и mrcu Cookies
                     SendRequest("https://account.mail.ru", RequestMethods.Auto, true, CookiesStorage).Dispose();
                     if (string.IsNullOrEmpty(CookiesStorage["act"]?.Value) || string.IsNullOrEmpty(CookiesStorage["mrcu"]?.Value)) throw new Exception(L10n.initialbindingtokens_error);
 
-                    //MailRu OAuth Step
+                    //MailRu OAuth Шаг
                     string OAuthContent = $"Login={Login}&Password={Password}";
                     using (ResponseContent OAuthResponse = SendRequest("https://auth.mail.ru/cgi-bin/auth", RequestMethods.Auto, false, CookiesStorage, OAuthContent))
                     {
-                        //check for login fail
+                        //Проверка наличие ошибки входа в систему
                         if (OAuthResponse["Location"].Contains("fail=1")) throw new Exception(L10n.wrongpassword);
 
-                        //check for two factor
+                        //Проверка наличия двухфакторки
                         if (OAuthResponse["Location"].Contains("secstep"))
                         {
                             #region Two Factor Auth
@@ -61,14 +68,14 @@ namespace AUTHORIZATION
                             bool PassedWithCache = false;
                             if (File.Exists("mailru-two-factor"))
                             {
-                                //check for exists 2fa cache
+                                //Существует ли проверка кэша 2-факторной авторизации
                                 IniFile MRTF = new IniFile("mailru-two-factor");
                                 if (MRTF.KeyExists("Mpop", Login) && MRTF.KeyExists("ssdc", Login))
                                 {
                                     CookiesStorage.Add(new Cookie("Mpop", MRTF.Read("Mpop", Login), "/", ".auth.mail.ru"));
                                     CookiesStorage.Add(new Cookie("ssdc", MRTF.Read("ssdc", Login), "/", ".auth.mail.ru"));
 
-                                    //try to login with cache info
+                                    //Вход в систему с информацией о кэше
                                     using (ResponseContent Response = SendRequest("https://auth.mail.ru/cgi-bin/auth",
                                         RequestMethods.Auto, false, CookiesStorage, OAuthContent))
                                     {
@@ -84,13 +91,10 @@ namespace AUTHORIZATION
 
                             if (!PassedWithCache)
                             {
-                                //Starting 2fa form
+                                //Запуск 2-факторной авторизации
                                 MailRuTF MailRuTF = new MailRuTF(Login, CookiesStorage);
                                 MailRuTF.ShowDialog();
-                                if (!MailRuTF.Passed)
-                                {
-                                    throw new Exception(L10n.userabandone2fa);
-                                }
+                                if (!MailRuTF.Passed) throw new Exception(L10n.userabandone2fa);
                             }
 
                             #endregion
@@ -108,7 +112,7 @@ namespace AUTHORIZATION
                         throw new Exception(L10n.autherror.Replace("%%var%%", "o2csrf"));
                     }
 
-                    // MailRu Login
+                    //Вход MailRu
                     void MailRuLogin(bool TryToBind)
                     {
                         using (ResponseContent Response = SendRequest(
@@ -120,42 +124,26 @@ namespace AUTHORIZATION
                            $"login={Login}",
                            RequestMethods.Auto, true, CookiesStorage))
                         {
-                            //login stopped
+                            //Вход в систему остановлен
                             if (Response.WebResponse.ResponseUri.ToString() != "https://my.games/")
                             {
-                                //check for block
+                                //Проверить наличие блокировки
                                 Match BlockedMatch = Regex.Match(Response.Body, @"blocked *= *(\d)");
                                 Match CaptchaMatch = Regex.Match(Response.Body, @"captcha *= *(\d)");
-                                if (BlockedMatch.Groups[1].Value == "1")
-                                {
-                                    throw new Exception(L10n.reqsblocked_error);
-                                }
 
-                                if (CaptchaMatch.Groups[1].Value == "1")
-                                {
-                                    throw new Exception(L10n.captchablock_error);
-                                }
+                                if (BlockedMatch.Groups[1].Value == "1") throw new Exception(L10n.reqsblocked_error);
+                                if (CaptchaMatch.Groups[1].Value == "1") throw new Exception(L10n.captchablock_error);
 
-                                //Maybe mailru account has not binded to my.games
-                                //trying to bind
-                                if (!TryToBind)
-                                {
-                                    return;
-                                }
+                                // Может быть, аккаунт mailru еще не привязан к моему.игры
+                                // Попытка привязать
+                                if (!TryToBind) return;
 
                                 using (ResponseContent AccBind = SendRequest("https://o2.mail.ru/login", RequestMethods.Auto, false, CookiesStorage, $"o2csrf={CookiesStorage["o2csrf"]?.Value}&login={Login}"))
                                 {
                                     BlockedMatch = Regex.Match(AccBind.Body, @"blocked *= *(\d)");
                                     CaptchaMatch = Regex.Match(AccBind.Body, @"captcha *= *(\d)");
-                                    if (BlockedMatch.Groups[1].Value == "1")
-                                    {
-                                        throw new Exception($"{L10n.reqsblocked_error}\n{L10n.autoaccbindblock_error}");
-                                    }
-
-                                    if (CaptchaMatch.Groups[1].Value == "1")
-                                    {
-                                        throw new Exception($"{L10n.captchablock_error}\n{L10n.autoaccbindblock_error}");
-                                    }
+                                    if (BlockedMatch.Groups[1].Value == "1") throw new Exception($"{L10n.reqsblocked_error}\n{L10n.autoaccbindblock_error}");
+                                    if (CaptchaMatch.Groups[1].Value == "1") throw new Exception($"{L10n.captchablock_error}\n{L10n.autoaccbindblock_error}");
 
                                     MailRuLogin(false);
                                 }
@@ -164,7 +152,7 @@ namespace AUTHORIZATION
                     }
                     MailRuLogin(true);
 
-                    //Getting SDCS Token
+                    //Получение SDCS Token
                     SendRequest($"https://auth-ac.my.games/sdc?from={WebUtility.UrlEncode("https://api.my.games/social/profile/session")}",
                                 RequestMethods.Auto, true, CookiesStorage).Dispose();
 
@@ -172,28 +160,14 @@ namespace AUTHORIZATION
                     {
                         if (Cookie.Domain.Contains("my.games"))
                         {
-                            if (Cookie.Name == "sdcs")
-                            {
-                                sdcs = Cookie.Value;
-                            }
-
-                            if (Cookie.Name == "mc")
-                            {
-                                mc = Cookie.Value;
-                            }
+                            if (Cookie.Name == "sdcs") sdcs = Cookie.Value;
+                            if (Cookie.Name == "mc") mc = Cookie.Value;
                         }
                     }
-                    if (string.IsNullOrEmpty(sdcs))
-                    {
-                        throw new Exception(L10n.autherror.Replace("%%var%%", "sdcs"));
-                    }
-
-                    if (string.IsNullOrEmpty(mc))
-                    {
-                        throw new Exception(L10n.autherror.Replace("%%var%%", "mc"));
-                    }
+                    if (string.IsNullOrEmpty(sdcs)) throw new Exception(L10n.autherror.Replace("%%var%%", "sdcs"));
+                    if (string.IsNullOrEmpty(mc)) throw new Exception(L10n.autherror.Replace("%%var%%", "mc"));
                 }
-                else throw new Exception("E-mail not supported");
+                else throw new Exception("Электронная почта не поддерживается");
 
                 #endregion MailRu Auth
 
@@ -202,19 +176,19 @@ namespace AUTHORIZATION
                 string GameAccount, GameToken;
                 int ProjectId = 1177, ChannelId = 35;
 
-                //Creating my.games session
+                //Создание my.games сессия
                 string SessionKey;
                 using (ResponseContent Response = SendRequest("https://authdl.my.games/gem.php?hint=Auth",
                     RequestMethods.Auto, false, null,
                     $"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Auth mc=\"{mc}\" sdcs=\"{sdcs}\" ChannelId=\"{ChannelId}\"/>")
                 )
                 {
-                    //check if EULA not accepted
+                    //Проверить, не принято ли лицензионное соглашение
                     if (!Response.Body.Contains("TermsAccepted"))
                     {
                         void AcceptTerms()
                         {
-                            //Getting EULA token
+                            //Получение EULA token
                             using (ResponseContent Response1 = SendRequest("https://api.my.games/social/profile/session",
                                 RequestMethods.GET, false, CookiesStorage))
                             {
@@ -225,7 +199,7 @@ namespace AUTHORIZATION
                                 if (string.IsNullOrEmpty(csrfmiddlewaretoken_jwt = Regex.Match(Response1.Body, "token\":\"([^\"]+)").Groups[1].Value))
                                     throw new Exception(L10n.termstoken_error.Replace("%%var%%", "csrfmiddlewaretoken_jwt"));
 
-                                //Accepting Terms
+                                //Принятие условий
                                 using (ResponseContent Response2 = SendRequest(
                                     "https://api.my.games/account/terms_accept/",
                                     RequestMethods.POST, false, CookiesStorage,
@@ -250,29 +224,20 @@ namespace AUTHORIZATION
                             {
                                 AcceptTerms();
                             }
-                            else
-                            {
-                                throw new Exception(L10n.userabandoneterms);
-                            }
+                            else throw new Exception(L10n.userabandoneterms);
                         }
-                        else if (Dialog == DialogResult.No)
-                        {
-                            AcceptTerms();
-                        }
-                        else
-                        {
-                            throw new Exception(L10n.userabandoneterms);
-                        }
+                        else if (Dialog == DialogResult.No) AcceptTerms();
+                        else throw new Exception(L10n.userabandoneterms);
                     }
 
-                    //Getting SessionKey
+                    //Получение SessionKey
                     if (string.IsNullOrEmpty(SessionKey = Regex.Match(Response.Body, "SessionKey=\"([^\"]+)").Groups[1].Value))
                     {
                         throw new Exception(L10n.sessionkey_error);
                     }
                 }
 
-                //Registration Session to Portal
+                //Регистрация сессии на Portal
                 using (ResponseContent Response = SendRequest("https://authdl.my.games/gem.php?hint=Portal",
                     RequestMethods.Auto, false, null,
                     $"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Portal SessionKey=\"{SessionKey}\" Url=\"http://authdl.my.games/robots.txt\"/>")
@@ -285,7 +250,7 @@ namespace AUTHORIZATION
                     SendRequest(RedirectUrl, RequestMethods.Auto, false, null).Dispose();
                 }
 
-                //Login to game project
+                //Вход в игровой проект
                 using (ResponseContent Response = SendRequest("https://authdl.my.games/gem.php?hint=Login",
                     RequestMethods.Auto, false, null,
                     $"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Login SessionKey=\"{SessionKey}\" ProjectId=\"{ProjectId}\" ShardId=\"{Server}\"/>")
@@ -324,7 +289,6 @@ namespace AUTHORIZATION
             GET = 1,
             POST = 2
         }
-
         public static object RequestLock = new object();
         public static ResponseContent SendRequest(string URL, RequestMethods Method, bool Redirecting, CookieCollection Cookies, string Content = null)
         {
@@ -357,7 +321,7 @@ namespace AUTHORIZATION
 
                 ResponseContent Response = new ResponseContent(Request.GetResponse());
 
-                //Log This Request
+                //Запись лога
                 if (Logging)
                 {
                     string Log = $"Log - [{DateTime.Now}]\n{{\n" +
@@ -374,7 +338,15 @@ namespace AUTHORIZATION
                                  $"{GetCookiesForLog(Response.Cookies, URL, 3)}" +
                                  "    }\n" +
                                  "}\n";
-                    try { File.AppendAllText("MailRuAuthLog.log", Convert.ToBase64String(Encoding.UTF8.GetBytes(Log)) + Environment.NewLine); } catch { } //Временная заглушка
+                    try 
+                    { 
+                        File.AppendAllText("MailRuAuthLog.log", Convert.ToBase64String(Encoding.UTF8.GetBytes(Log)) + Environment.NewLine);
+                        #if DEBUG
+                        #else
+                        MailRuLogUnpack.Unpack(true, true);
+                        #endif
+                    }
+                    catch { }
                 }
 
                 if (Cookies != null) foreach (Cookie Cookie in Response.Cookies) Cookies.Add(Cookie);
@@ -406,7 +378,6 @@ namespace AUTHORIZATION
 
             return Content;
         }
-
         private static string FilterURLForLog(string URL)
         {
             foreach (Match Match in Regex.Matches(URL, "(state|token|login|code)(=|%3D)([^&% \n]+)"))
@@ -452,7 +423,6 @@ namespace AUTHORIZATION
 
             return CookiesMassive;
         }
-
         public class ResponseContent : IDisposable
         {
             public ResponseContent(WebResponse WebResponse)

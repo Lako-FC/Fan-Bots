@@ -7,7 +7,6 @@ namespace AUTHORIZATION
 {
     public class MyCom
     {
-        private readonly string[] error_auth = { "Ошибка в функции 'SubmitXML': \n", "Ошибка авторизации.." };
         private readonly int ProjectId = 2000076;
         private int ShardId;
         private readonly int ChannelId = 35;
@@ -22,7 +21,6 @@ namespace AUTHORIZATION
                 webRequest.Timeout = 30000;
                 webRequest.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip,deflate");
                 webRequest.Method = "POST";
-
                 webRequest.ContentType = "application/x-www-form-urlencoded";
                 webRequest.ContentLength = xmlRequest.Length;
                 webRequest.UserAgent = "Downloader/1950";
@@ -35,9 +33,16 @@ namespace AUTHORIZATION
                 responseReader.Close();
                 webRequest.GetResponse().Close();
             }
-            catch (Exception er) { return new[] { "false", error_auth[0] + er }; };
+            catch (Exception er) { return new[] { "false", "Ошибка в функции 'SubmitXML': \n" + er }; };
             return new[] { "true", soapResult };
         }
+
+        /// <summary>
+        /// Авторизация
+        /// </summary>
+        /// <param name="login">Логин.</param>
+        /// <param name="password">Пароль.</param>
+        /// <returns>Результат авторизации.</returns>
         public string[] AuthMyCom(string login, string password, byte s)
         {
             if (s == 1) ShardId = 1;
@@ -48,7 +53,7 @@ namespace AUTHORIZATION
             Regex SessionKeyRG = new Regex("SessionKey=\"(.*)\" Email=");
             string SessionKey = SessionKeyRG.Match(res[1]).Groups[1].Value;
 
-            if (SessionKey == "") return new[] { "false", error_auth[1] };
+            if (SessionKey == "") return new[] { "false", "Ошибка авторизации.." };
 
             res = SXml("<?xml version=\"1.0\" encoding=\"UTF-8\"?><Login SessionKey=\"" + SessionKey + "\" ProjectId=\"" + ProjectId + "\" ShardId=\"" + ShardId + "\"/>", "https://authdl.my.com/mygc.php?hint=Login");
 

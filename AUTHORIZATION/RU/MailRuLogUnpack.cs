@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 namespace AUTHORIZATION
 {
 #if DEBUG
+#else
     internal static class MailRuLogUnpack
     {
         public static void Unpack(bool UnpackContent, bool UnpackCookies)
