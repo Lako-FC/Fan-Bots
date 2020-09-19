@@ -2071,7 +2071,7 @@ namespace LAUNCHER_FANBOT
             this.label_version_fanbots.Name = "label_version_fanbots";
             this.label_version_fanbots.Size = new System.Drawing.Size(81, 13);
             this.label_version_fanbots.TabIndex = 24;
-            this.label_version_fanbots.Text = "Fan-Bot\'s: v3.1";
+            this.label_version_fanbots.Text = "Fan-Bot\'s: v3.2";
             // 
             // label_ver
             // 
