@@ -1735,7 +1735,7 @@ namespace LAUNCHER_FANBOT
             // 
             // hScrollBar_transparency
             // 
-            this.hScrollBar_transparency.LargeChange = 5;
+            this.hScrollBar_transparency.LargeChange = 1;
             this.hScrollBar_transparency.Location = new System.Drawing.Point(7, 14);
             this.hScrollBar_transparency.Minimum = 10;
             this.hScrollBar_transparency.Name = "hScrollBar_transparency";
