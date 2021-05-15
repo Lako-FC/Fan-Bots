@@ -570,7 +570,7 @@ namespace LAUNCHER_FANBOT
         private void label_creaters_Click(object sender, EventArgs e)
         {
             EngineWork.MSB_Information(
-            $"\nДаниил Дилако [Lako]\nVK: https://vk.com/dlako\n" +
+            $"\n[0xLaileb]\n" +
             $"\nДмитрий Бард [Zrefer]\nVK: https://vk.com/zrefer\n" +
             $"\nДмитрий Клименков [DeKoSiK]\nVK: https://vk.com/id_dmitriy_dekos\n", label_creaters.Text);
         }
