@@ -1,5 +1,5 @@
 <p align="center"> 
-  <img align="center" src="https://github.com/Lako-FC/Fan-Bots/blob/master/GITHUB_RESOURCES/logo.png?raw=true" width="150"/> 
+  <img align="center" src="https://github.com/0xLaileb/Fan-Bots/blob/master/GITHUB_RESOURCES/logo.png?raw=true" width="150"/> 
 </p>
 
 <h1><div align="center">Fan-Bot's</h1>
@@ -10,20 +10,20 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/downloads/Lako-FC/Fan-Bots/total?color=%231DC8EE&label=DOWNLOADS&logo=GitHub&logoColor=%231DC8EE&style=flat"/>
-  <img src="https://img.shields.io/github/last-commit/Lako-FC/Fan-Bots?color=%231DC8EE&label=LAST%20COMMIT&style=flat"/>
-  <img src="https://img.shields.io/github/release-date/Lako-FC/Fan-Bots?color=%231DC8EE&label=RELEASE%20DATE&style=flat"/>
+  <img src="https://img.shields.io/github/downloads/0xLaileb/Fan-Bots/total?color=%231DC8EE&label=DOWNLOADS&logo=GitHub&logoColor=%231DC8EE&style=flat"/>
+  <img src="https://img.shields.io/github/last-commit/0xLaileb/Fan-Bots?color=%231DC8EE&label=LAST%20COMMIT&style=flat"/>
+  <img src="https://img.shields.io/github/release-date/0xLaileb/Fan-Bots?color=%231DC8EE&label=RELEASE%20DATE&style=flat"/>
 </p>
 
 <p align="center">
   Данное <b>бесплатное ПО</b> предназначено для запуска ботов на игровые сервера Warface.<br>
   Группа ВК: <a href="https://vk.com/fanbots_wf" target="_blank">Fan-Bot's ● (Fun-Bot's for Warface)</a><br>
-  Связанный проект: <a href="https://github.com/Lako-FC/warfacebot_fb" target="_blank">WarfaceBotFB</a><br>
+  Связанный проект: <a href="https://github.com/0xLaileb/warfacebot_fb" target="_blank">WarfaceBotFB</a><br>
 </p>
 
 [wf_ru]: https://ru.warface.com/
-[releases]: https://github.com/Lako-FC/Fan-Bots/releases/
-[commands_wb]: https://github.com/Lako-FC/warfacebot_fb#команды
+[releases]: https://github.com/0xLaileb/Fan-Bots/releases/
+[commands_wb]: https://github.com/0xLaileb/warfacebot_fb#команды
 
 ## 🤖 Основной функционал
 
@@ -38,7 +38,7 @@
 - Сохранение данных аккаунта, настроек и логов (авторизации и ботов).
 
 ## 🔎 Основной лаунчер
-![](https://github.com/Lako-FC/Fan-Bots/blob/master/GITHUB_RESOURCES/gui.gif?raw=true)
+![](https://github.com/0xLaileb/Fan-Bots/blob/master/GITHUB_RESOURCES/gui.gif?raw=true)
 
 ## 🚀 Как использовать
 
@@ -72,7 +72,7 @@
 1. Установите Visual Studio (не забудьте поставить C# и .Net Framework 4.7).
 2. Скачайте данный исходный код (лучше из релиза).
 3. Выполните сборку проекта по очереди (`AUTHORIZATION` -> `LAUNCHER_FANBOT` -> `START`).
-4. Запускайте по [инструкции запуска](https://github.com/Lako-FC/Fan-Bots#как-использовать).
+4. Запускайте по [инструкции запуска](https://github.com/0xLaileb/Fan-Bots#как-использовать).
 
 - ### Список, что нужно исправить
 1. Переписать авторизацию EU.
