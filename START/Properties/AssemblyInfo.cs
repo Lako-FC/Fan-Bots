@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Fun-Code")]
 [assembly: AssemblyProduct("Start")]
-[assembly: AssemblyCopyright("Copyright © Lako 2020")]
+[assembly: AssemblyCopyright("Copyright © 0xLaileb 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
