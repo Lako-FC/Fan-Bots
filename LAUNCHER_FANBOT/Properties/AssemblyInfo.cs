@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 // Общие сведения об этой сборке предоставляются следующим набором
@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Fun-Code")]
 [assembly: AssemblyProduct("launcher")]
-[assembly: AssemblyCopyright("Copyright © Lako 2020")]
+[assembly: AssemblyCopyright("Copyright © 0xLaileb 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
